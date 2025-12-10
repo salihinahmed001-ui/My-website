@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Balance Click System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            text-align: center;
+            padding: 40px;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            max-width: 350px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #aaa;
+        }
+        button {
+            width: 90%;
+            padding: 10px;
+            margin: 8px;
+            border-radius: 6px;
+            border: none;
+            background: blue;
+            color: white;
+            font-size: 16px;
+        }
+        p {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box" id="mainBox">
+    <h2>Welcome, sanjida Akram</h2>
+    <h3>Balance: <span id="balance">0</span> Taka</h3>
+    <button onclick="getMoney()">Click to Get 20 Taka</button>
+    <p id="msg"></p>
+</div>
+
+<script>
+let balance = localStorage.getItem("balance") ? parseInt(localStorage.getItem("balance")) : 0;
+document.getElementById("balance").innerText = balance;
+
+let lastClick = localStorage.getItem("lastClick");
+
+function getMoney() {
+    let now = Date.now();
+
+    if(lastClick && now - lastClick < 24*60*60*1000){
+        let hoursLeft = Math.ceil((24*60*60*1000 - (now - lastClick)) / (60*60*1000));
+        document.getElementById("msg").innerText = "You can click again after " + hoursLeft + " hours.";
+        return;
+    }
+
+    balance += 20;
+    localStorage.setItem("balance", balance);
+    document.getElementById("balance").innerText = balance;
+
+    localStorage.setItem("lastClick", now);
+    lastClick = now;
+
+    document.getElementById("msg").innerText = "20 Taka Added!";
+}
+</script>
+
+</body>
+</html>
